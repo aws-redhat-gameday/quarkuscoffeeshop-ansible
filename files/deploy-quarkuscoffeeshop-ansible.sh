@@ -14,14 +14,15 @@ function usage() {
   echo -n "${0} [OPTION]
  Options:
   -d      Add domain 
-  -t      OpenShift Token
+  -u      OpenShift username
+  -p      OpenShift user password
   -s      Store ID
   -h      Display this help and exit
   -u      Uninstall coffeeshop 
   To deploy qaurkuscoffeeshop-ansible playbooks
-  ${0}  -d ocp4.example.com -t sha-123456789  -s ATLANTA
+  ${0}  -d ocp4.example.com -u user -p 123456789 -s ATLANTA
   To Delete qaurkuscoffeeshop-ansible playbooks from OpenShift
-  ${0}  -d ocp4.example.com -t sha-123456789  -s ATLANTA -u true
+  ${0}  -d ocp4.example.com -u user -p 123456789 -s ATLANTA -u true
 "
 }
 
@@ -65,14 +66,14 @@ function configure-ansible-and-playbooks(){
   if [[ $DEVELOPMENT == "false" ]] || [[ -z $DEVELOPMENT ]];
   then
     ${USE_SUDO} rm -rf ${ROLE_LOC}
-    ${USE_SUDO} ansible-galaxy install   git+https://github.com/quarkuscoffeeshop/quarkuscoffeeshop-ansible.git
+    ${USE_SUDO} ansible-galaxy install git+https://github.com/aws-redhat-gameday/quarkuscoffeeshop-ansible.git
     echo "****************"
     echo "Start Deployment"
     echo "****************"
   elif  [ $DEVELOPMENT == "true" ];
   then 
     ${USE_SUDO} rm -rf ${ROLE_LOC}
-    ${USE_SUDO} ansible-galaxy install   git+https://github.com/quarkuscoffeeshop/quarkuscoffeeshop-ansible.git,dev
+    ${USE_SUDO} ansible-galaxy install git+https://github.com/aws-redhat-gameday/quarkuscoffeeshop-ansible.git,${GIT_BRANCH}
     echo "****************"
     echo " Start Deployment "
     echo " DEVELOPMENT MODE "
@@ -146,7 +147,8 @@ while getopts ":d:t:s:h:u:" arg; do
   case $arg in
     h) export  HELP=True;;
     d) export  DOMAIN=$OPTARG;;
-    t) export  OCP_TOKEN=$OPTARG;;
+    u) export  OCP_USERNAME=$OPTARG;;
+    p) export  OCP_PASSWORD=$OPTARG;;
     s) export  STORE_ID=$OPTARG;;
     u) export  DESTROY=$OPTARG;;
   esac
@@ -183,7 +185,7 @@ function modulecheck(){
   esac
 }
 
-echo -e "\n$DOMAIN  $OCP_TOKEN  $STORE_ID\n"
+echo -e "\n$DOMAIN  $OCP_USERNAME/$OCP_PASSWORD  $STORE_ID\n"
 
 if [ -f $HOME/env.variables ];
 then 
@@ -230,7 +232,8 @@ cat >/tmp/deploy-quarkus-cafe.yml<<YAML
 - hosts: localhost
   become: yes
   vars:
-    openshift_token: ${OCP_TOKEN}
+    openshift_username: ${OCP_USERNAME}
+    openshift_password: ${OCP_PASSWORD}
     openshift_url: https://api.${DOMAIN}:6443
     insecure_skip_tls_verify: true
     default_owner: ${USERNAME}
