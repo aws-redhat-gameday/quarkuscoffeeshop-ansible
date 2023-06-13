@@ -2,7 +2,7 @@
 - name: Add quarkuscoffeeshop helm chart repo
   kubernetes.core.helm_repository:
     name: quarkuscoffeeshop-helm
-    repo_url: "https://quarkuscoffeeshop.github.io/quarkuscoffeeshop-helm/"
+    repo_url: "https://github.com/aws-redhat-gameday/quarkuscoffeeshop-helm.git"
   when: not delete_deployment|bool
   tags: helm
 
@@ -36,8 +36,8 @@
 
 - name: Copying over  quarkuscoffeeshop helm chart values
   template:
-    src: templates/vaules.yaml.j2
-    dest:  "{{ config_location }}/vaules.yaml"
+    src: templates/values.yaml.j2
+    dest:  "{{ config_location }}/values.yaml"
     owner: "{{ default_owner }}"
     group: "{{ default_group }}"
     mode: 0666
@@ -60,7 +60,7 @@
     release_namespace: "{{ project_namespace }}"
     update_repo_cache: true 
     values_files:
-      -  "{{ config_location }}/vaules.yaml"
+      -  "{{ config_location }}/values.yaml"
   when: not delete_deployment|bool
   tags: helm
 
