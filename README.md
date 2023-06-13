@@ -40,7 +40,8 @@ Quick Start
 ```
 $ cat >source.env<<EOF
 CLUSTER_DOMAIN_NAME=clustername.example.com
-TOKEN=sha256~XXXXXXXXXXXX
+OCP_USERNAME=cluster-admin
+OCP_PASSWORD=xxxxxxxxxxxxx
 ACM_WORKLOADS=n
 AMQ_STREAMS=y
 CONFIGURE_POSTGRES=y
@@ -68,7 +69,8 @@ $ podman run  -it --env-file=./source.env  quay.io/quarkuscoffeeshop/quarkuscoff
 ```
 $ cat >source.env<<EOF
 CLUSTER_DOMAIN_NAME=clustername.example.com
-TOKEN=sha256~XXXXXXXXXXXX
+OCP_USERNAME=cluster-admin
+OCP_PASSWORD=xxxxxxxxxxxxx
 ACM_WORKLOADS=y
 AMQ_STREAMS=y
 CONFIGURE_POSTGRES=y
@@ -84,7 +86,8 @@ $ podman run  -it --env-file=./source.env  quay.io/quarkuscoffeeshop/quarkuscoff
 ```
 $ cat >source.env<<EOF
 CLUSTER_DOMAIN_NAME=clustername.example.com
-TOKEN=sha256~XXXXXXXXXXXX
+OCP_USERNAME=cluster-admin
+OCP_PASSWORD=xxxxxxxxxxxxx
 ACM_WORKLOADS=n
 AMQ_STREAMS=y
 CONFIGURE_POSTGRES=y
@@ -162,41 +165,42 @@ curl  --request POST http://${ENDPOINT}/order \
 
 Role Variables
 --------------
-Type  | Description  | Default Value
---|---|--
-deployment_method | docker or s2i build | docker
-skip_amq_install |  Skip Red Hat AMQ Install  |  false
-skip_mongodb_operator_install |  Skip MongoDB Operator Install  |  false
-single_mongodb_install | Skip single instance mongodb | false
-skip_quarkuscoffeeshop_helm_install |  Skip quarkuscoffeeshop helm chart install  |  false
-openshift_token | OpenShift login token  | 123456789
-openshift_url | OpenShift target url  | https://master.example.com
-project_namespace | OpenShift Project name for the quarkus-cafe | quarkus-cafe-demo
-insecure_skip_tls_verify  |  Skip insecure tls verify  |  true
-default_owner | Default owner of template files. | root
-default_group | Default group of template files. |  root
-delete_deployment  | delete the deployment and project for quarkus-cafe-demo  | false
-amqstartingCSV  | Red Hat AMQ csv version  |  amqstreams.v1.6.1
-mongodbstartingCSV  | MongoDB Ops Manager version  |  mongodb-enterprise.v1.8.0
-config_location  | default location for application templates  | "/tmp/"
-version_barista | Default container barista tag | 5.0.0-SNAPSHOT
-version_counter | Default container counter tag | 5.0.1-SNAPSHOT
-version_customermocker | Default container customermocker tag | 3.0.1
-version_kitchen | Default container kitchen tag | 5.0.0-SNAPSHOT
-version_web | Default container web tag | 5.0.1-SNAPSHOT
-helm_chart_version | Version of Qaurkus Cafe Helm Chart | 3.4.4
-pgsql_username | Default postgress user  | coffeshopadmin
-postgres_password | this is the postgress password that will be used in deployment| must be changed
-pgsql_url | default postgres URL | 'jdbc:postgresql://coffeeshopdb:5432/coffeeshopdb?currentSchema=coffeeshop'
-storeid | Store id for web frontend | RALEIGH
-quarkus_log_level | Quarkus coffee shop log level |  INFO
-quarkuscoffeeshop_log_level | Microservice log level | DEBUG
+| Type                                | Description                                                    | Default Value                                                               |
+| ----------------------------------- | -------------------------------------------------------------- | --------------------------------------------------------------------------- |
+| deployment_method                   | docker or s2i build                                            | docker                                                                      |
+| skip_amq_install                    | Skip Red Hat AMQ Install                                       | false                                                                       |
+| skip_mongodb_operator_install       | Skip MongoDB Operator Install                                  | false                                                                       |
+| single_mongodb_install              | Skip single instance mongodb                                   | false                                                                       |
+| skip_quarkuscoffeeshop_helm_install | Skip quarkuscoffeeshop helm chart install                      | false                                                                       |
+| openshift_username                  | OpenShift user login                                           | user1                                                                       |
+| openshift_password                  | OpenShift user password                                        | 123456789                                                                   |
+| openshift_url                       | OpenShift target url                                           | https://master.example.com                                                  |
+| project_namespace                   | OpenShift Project name for the quarkus-cafe                    | quarkus-cafe-demo                                                           |
+| insecure_skip_tls_verify            | Skip insecure tls verify                                       | true                                                                        |
+| default_owner                       | Default owner of template files.                               | root                                                                        |
+| default_group                       | Default group of template files.                               | root                                                                        |
+| delete_deployment                   | delete the deployment and project for quarkus-cafe-demo        | false                                                                       |
+| amqstartingCSV                      | Red Hat AMQ csv version                                        | amqstreams.v1.6.1                                                           |
+| mongodbstartingCSV                  | MongoDB Ops Manager version                                    | mongodb-enterprise.v1.8.0                                                   |
+| config_location                     | default location for application templates                     | "/tmp/"                                                                     |
+| version_barista                     | Default container barista tag                                  | 5.0.0-SNAPSHOT                                                              |
+| version_counter                     | Default container counter tag                                  | 5.0.1-SNAPSHOT                                                              |
+| version_customermocker              | Default container customermocker tag                           | 3.0.1                                                                       |
+| version_kitchen                     | Default container kitchen tag                                  | 5.0.0-SNAPSHOT                                                              |
+| version_web                         | Default container web tag                                      | 5.0.1-SNAPSHOT                                                              |
+| helm_chart_version                  | Version of Qaurkus Cafe Helm Chart                             | 3.4.4                                                                       |
+| pgsql_username                      | Default postgress user                                         | coffeshopadmin                                                              |
+| postgres_password                   | this is the postgress password that will be used in deployment | must be changed                                                             |
+| pgsql_url                           | default postgres URL                                           | 'jdbc:postgresql://coffeeshopdb:5432/coffeeshopdb?currentSchema=coffeeshop' |
+| storeid                             | Store id for web frontend                                      | RALEIGH                                                                     |
+| quarkus_log_level                   | Quarkus coffee shop log level                                  | INFO                                                                        |
+| quarkuscoffeeshop_log_level         | Microservice log level                                         | DEBUG                                                                       |
 
 **Download the deploy-quarkuscoffeeshop-ansible.sh shell script**
 ```
 $ curl -OL https://raw.githubusercontent.com/quarkuscoffeeshop/quarkuscoffeeshop-ansible/master/files/deploy-quarkuscoffeeshop-ansible.sh
 $ chmod +x deploy-quarkuscoffeeshop-ansible.sh
-$ ./deploy-quarkuscoffeeshop-ansible.sh -d ocp4.example.com -t sha-123456789 -p 123456789 -s ATLANTA
+$ ./deploy-quarkuscoffeeshop-ansible.sh -d ocp4.example.com -u user -p 123456789 -s ATLANTA
 ```
 
 **To Build container image**

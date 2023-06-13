@@ -8,8 +8,13 @@ if [ -z  ${CLUSTER_DOMAIN_NAME} ]; then
     exit 1
 fi
 
-if [ -z  ${TOKEN} ]; then
-  echo "Token is not set"
+if [ -z  ${OCP_USERNAME} ]; then
+  echo "OCP username is not set"
+  exit 1
+fi
+
+if [ -z  ${OCP_PASSWORD} ]; then
+  echo "OCP user password is not set"
   exit 1
 fi
 
@@ -27,7 +32,7 @@ echo "**************************************************************************
 sleep 5s
 if [ $DELETE_DEPLOYMENT == "true" ]; then
    echo "Deleting deployment..."
-   /opt/workspace/files/deploy-quarkuscoffeeshop-ansible.sh  -d ${CLUSTER_DOMAIN_NAME} -t  ${TOKEN}  -s STORE-${RANDOM_STRING} -u true
+   /opt/workspace/files/deploy-quarkuscoffeeshop-ansible.sh  -d ${CLUSTER_DOMAIN_NAME} -u ${OCP_USERNAME}  -s STORE-${RANDOM_STRING} -u true
 else 
-    /opt/workspace/files/deploy-quarkuscoffeeshop-ansible.sh  -d ${CLUSTER_DOMAIN_NAME} -t  ${TOKEN}  -s STORE-${RANDOM_STRING}
+    /opt/workspace/files/deploy-quarkuscoffeeshop-ansible.sh  -d ${CLUSTER_DOMAIN_NAME} -u ${OCP_USERNAME}  -s STORE-${RANDOM_STRING}
 fi

@@ -1,6 +1,7 @@
 ---
 # defaults file for quarkuscoffeeshop-demo-role
-openshift_token: 1234567890
+openshift_username: cluster-admin
+openshift_password: rosaAdminPassword123
 openshift_url: https://api.ocp4.example.com:6443
 default_owner: root
 default_group: root

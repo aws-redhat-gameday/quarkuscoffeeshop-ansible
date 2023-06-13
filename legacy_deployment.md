@@ -16,12 +16,14 @@ Quarkus CoffeeShop v3.3.1 OpenShift Deployment  with MongoDB Operator
 ```
 $ ansible-galaxy install tosin2013.quarkus_cafe_demo_role
 $ export DOMAIN=ocp4.example.com
-$ export OCP_TOKEN=123456789
+$ export OCP_USERNAME=user1
+$ export OCP_PASSWORD=123456789
 $ cat >deploy-quarkus-cafe.yml<<YAML
 - hosts: localhost
   become: yes
   vars:
-    openshift_token: ${OCP_TOKEN}
+    openshift_username: ${OCP_USERNAME}
+    openshift_password: ${OCP_PASSWORD}
     openshift_url: https://api.${DOMAIN}:6443
     insecure_skip_tls_verify: true
     default_owner: ${USER}
@@ -50,12 +52,14 @@ Quarkus CoffeeShop v3.3.1 OpenShift Deployment  with single mongoDB instance
 ```
 $ ansible-galaxy install tosin2013.quarkus_cafe_demo_role
 $ export DOMAIN=ocp4.example.com
-$ export OCP_TOKEN=123456789
+$ export OCP_USERNAME=user1
+$ export OCP_PASSWORD=123456789
 $ cat >deploy-quarkus-cafe.yml<<YAML
 - hosts: localhost
   become: yes
   vars:
-    openshift_token: ${OCP_TOKEN}
+    openshift_username: ${OCP_USERNAME}
+    openshift_password: ${OCP_PASSWORD}
     openshift_url: https://api.${DOMAIN}:6443
     insecure_skip_tls_verify: true
     default_owner: ${USER}

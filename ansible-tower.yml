@@ -1,7 +1,8 @@
 - hosts: localhost
   become: no
   vars:
-    openshift_token: openshift-token
+    openshift_username: user1
+    openshift_password: xxxxx
     domain: example.com
     postgres_password: 'changeme'
     storeid: ATLANTA
