@@ -73,7 +73,7 @@ function configure-ansible-and-playbooks(){
   elif  [ $DEVELOPMENT == "true" ];
   then 
     ${USE_SUDO} rm -rf ${ROLE_LOC}
-    ${USE_SUDO} ansible-galaxy install git+https://github.com/aws-redhat-gameday/quarkuscoffeeshop-ansible.git,${GIT_BRANCH}
+    ${USE_SUDO} ansible-galaxy install git+https://github.com/aws-redhat-gameday/quarkuscoffeeshop-ansible.git,dev
     echo "****************"
     echo " Start Deployment "
     echo " DEVELOPMENT MODE "
